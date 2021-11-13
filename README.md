@@ -1,13 +1,13 @@
 # Todo-app-react
 This is a simple todo react application with backend by note.js.
 
-Technologies
+Technologies :-
 JavaScript
 Node JS
 Express
 Mongo
 
-Features
+Features :-
 Create
 Read
 Update
