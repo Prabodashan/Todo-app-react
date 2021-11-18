@@ -4,13 +4,16 @@ const PORT = 3300;
 require("./helpers/mongodb_int");
 const todoRoutes = require("./routes/todos");
 
+//common middlewares
+app.use(express.json());
+
 //Basic route
 app.get("/", (req, res) => {
   res.send("Welcome to the server!");
 });
 
 //Todo routes middleware
-app.use('/api/todos', todoRoutes)
+app.use("/api/todos", todoRoutes);
 
 app.get("/prob/", (req, res) => {
   res.send("<button>prob</button>");

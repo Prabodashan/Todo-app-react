@@ -23,7 +23,7 @@ const todoSchema = new mongoose.Schema({
 
 //Custom title validation
 function validateTitle(title) {
-  const regEx = /^[a-zA-z\s]$/;
+  const regEx = /^[a-zA-z\s]+$/;
   return regEx.test(title);
 }
 
