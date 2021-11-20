@@ -6,7 +6,7 @@ exports.getAllTodos = async (req, res) => {
     const todos = await Todo.find();
     res.status(200).json(todos);
   } catch (err) {
-    res.json({ errors: { massage: err.message } });
+    res.json({ errors: { message: err.message } });
   }
 };
 
@@ -17,7 +17,7 @@ exports.addNewTodo = async (req, res) => {
   const todoByTitle = await Todo.findOne({ title });
 
   if (todoByTitle) {
-    return res.json({ errors: { massage: "Todo title already exist!!" } });
+    return res.json({ errors: { message: "Todo title already exist!!" } });
   }
 
   // Create new todo
@@ -26,7 +26,6 @@ exports.addNewTodo = async (req, res) => {
     description: description,
     creationDate: Date.now(),
   });
-
   try {
     await newTodo.save();
     res.status(200).json({
@@ -34,7 +33,7 @@ exports.addNewTodo = async (req, res) => {
       success: { message: "Todo successful created!!" },
     });
   } catch (err) {
-    res.json({ errors: { massage: Object.entries(err.errors)[0][1].message } });
+    res.json({ errors: { message: Object.entries(err.errors)[0][1].message } });
   }
 };
 
@@ -47,7 +46,7 @@ exports.getTodoById = async (req, res) => {
     const todo = await Todo.findById(todoId);
     res.status(200).json(todo);
   } catch (err) {
-    res.json({ errors: { massage: Object.entries(err.errors)[0][1].message } });
+    res.json({ errors: { message: Object.entries(err.errors)[0][1].message } });
   }
 };
 
@@ -61,13 +60,13 @@ exports.updateTodo = async (req, res) => {
 
   if (todoByTitle) {
     if (todoByTitle.id !== todoId) {
-      return res.json({ errors: { massage: "Todo title already exist!!" } });
+      return res.json({ errors: { message: "Todo title already exist!!" } });
     }
   }
   //Check if todo available according to the id
   const todoById = await Todo.findById(todoId);
   if (!todoById) {
-    return res.json({ errors: { massage: "Todo doesn't exist!!" } });
+    return res.json({ errors: { message: "Todo doesn't exist!!" } });
   }
 
   try {
@@ -87,19 +86,20 @@ exports.updateTodo = async (req, res) => {
       success: { message: "Todo successful updated!!" },
     });
   } catch (err) {
-    res.json({ errors: { massage: Object.entries(err.errors)[0][1].message } });
+    res.json({ errors: { message: Object.entries(err.errors)[0][1].message } });
   }
 };
 
 //Delete todo
 exports.deleteTodo = async (req, res) => {
   const { todoId } = req.params;
-
-  const todoById = await Todo.findById({ todoId });
+  console.log(todoId);
+  const todoById = await Todo.findById(todoId);
   if (!todoById) {
-    return res.json({ errors: { massage: "Todo doesn't exist!!" } });
+    console.log("Todo doesn't exist!!");
+    return res.json({ errors: { message: "Todo doesn't exist!!" } });
   }
-
+  console.log("before try");
   try {
     await Todo.findByIdAndDelete(todoId);
     res.status(200).json({
@@ -107,8 +107,9 @@ exports.deleteTodo = async (req, res) => {
       success: { message: "Todo successful deleted!!" },
     });
   } catch (err) {
-    res.json({ errors: { massage: Object.entries(err.errors)[0][1].message } });
+    res.json({ errors: { message: Object.entries(err.errors)[0][1].message } });
   }
+  console.log("after try");
 };
 
 //Get todos by Searching
@@ -121,6 +122,6 @@ exports.getTodosBySearch = async (req, res) => {
     });
     res.status(200).json(todos);
   } catch (err) {
-    res.json({ errors: { massage: Object.entries(err.errors)[0][1].message } });
+    res.json({ errors: { message: Object.entries(err.errors)[0][1].message } });
   }
 };

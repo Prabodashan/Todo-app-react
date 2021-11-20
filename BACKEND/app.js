@@ -4,7 +4,10 @@ const PORT = 3300;
 require("./helpers/mongodb_int");
 const todoRoutes = require("./routes/todos");
 
+const cors = require("cors");
+
 //common middlewares
+app.use(cors());
 app.use(express.json());
 
 //Basic route
