@@ -47,7 +47,7 @@ const Todoinput = ({ togleModal, modalVal, todoId, todosFetch }) => {
   };
 
   // Get one todo funtion
-  const getOneTodoHandler = async () => {
+  const getOneTodoHandler = async (todoId) => {
     try {
       const { data } = await axios.get(
         `http://localhost:3300/api/todos/${todoId}`
@@ -62,9 +62,9 @@ const Todoinput = ({ togleModal, modalVal, todoId, todosFetch }) => {
 
   useEffect(() => {
     if (todoId) {
-      getOneTodoHandler();
+      getOneTodoHandler(todoId);
     }
-  }, []);
+  }, [todoId]);
 
   //Update Todo Function
   const updateTodoHandler = async () => {

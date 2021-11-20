@@ -12,8 +12,8 @@ const todoSchema = new mongoose.Schema({
   description: {
     type: String,
     required: [true, "Enter a title"],
-    minlength: [10, "Minimum length of title would be 10 characters!"],
-    maxlength: [250, "Maximum length of title would be 250 characters!"],
+    minlength: [10, "Minimum length of description would be 10 characters!"],
+    maxlength: [250, "Maximum length of description would be 250 characters!"],
   },
   creationDate: {
     type: Date,

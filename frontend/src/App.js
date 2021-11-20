@@ -1,4 +1,4 @@
-import { Button, Container, Row, Col } from "react-bootstrap";
+import { Button, Container, Row, Col, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Todoinput from "./components/Todoinput";
 import Todocard from "./components/Todocard";
@@ -56,6 +56,26 @@ function App() {
     }
   };
 
+  const searchTodoHandler = async (keyword) => {
+    if (keyword === "") {
+      todosFetchHandler();
+    } else {
+      try {
+        const { data } = await axios.get(
+          `http://localhost:3300/api/todos/search/${keyword}`
+        );
+        if (data) {
+          setTodos(data);
+          console.log(data);
+        } else {
+          throw Error(data.errors.message);
+        }
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+  };
+
   useEffect(() => {
     todosFetchHandler();
   }, []);
@@ -66,6 +86,15 @@ function App() {
         <Row>
           <Col className="text-start">
             <h3 className="fw-bold">My Todo App</h3>
+          </Col>
+          <Col className="text-center">
+            <Form className="d-flex">
+              <Form.Control
+                type="search"
+                placeholder="Search"
+                onChange={(e) => searchTodoHandler(e.target.value)}
+              />
+            </Form>
           </Col>
           <Col className="text-end">
             <Button onClick={modalShowHide} variant="primary">
