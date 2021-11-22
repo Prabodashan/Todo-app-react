@@ -7,6 +7,7 @@ const Todoinput = ({ togleModal, modalVal, todoId, todosFetch }) => {
   //New todo states
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [todoImage, setTodoImage] = useState("");
 
   //Error state
   const [error, setError] = useState("");
@@ -24,12 +25,31 @@ const Todoinput = ({ togleModal, modalVal, todoId, todosFetch }) => {
     setDescription(newVal);
   };
 
+  const imgState = (imgName) => {
+    console.log(imgName);
+    setTodoImage(imgName);
+  };
+
+  //Configurations
+  const configPost = {
+    headers: {
+      "content-type": `multipart/form-data`,
+    },
+  };
+
   const createTodoHandler = async () => {
+    // Set form data
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("todoImage", todoImage);
+
     try {
-      const { data } = await axios.post(`http://localhost:3300/api/todos/`, {
-        title,
-        description,
-      });
+      const { data } = await axios.post(
+        `http://localhost:3300/api/todos/`,
+        formData,
+        configPost
+      );
       if (data.created) {
         setError("");
         setSuccess(data.success.message);
@@ -120,6 +140,7 @@ const Todoinput = ({ togleModal, modalVal, todoId, todosFetch }) => {
                 onChange={(e) => descState(e.target.value)}
               />
             </Form.Group>
+            <input type="file" onChange={(e) => imgState(e.target.files[0])} />
           </Form>
           {error && (
             <Alert variant="danger">

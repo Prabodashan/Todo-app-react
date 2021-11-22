@@ -15,6 +15,10 @@ const todoSchema = new mongoose.Schema({
     minlength: [10, "Minimum length of description would be 10 characters!"],
     maxlength: [250, "Maximum length of description would be 250 characters!"],
   },
+  todoImage: {
+    type: String,
+    required: [true, "Select an Image!"],
+  },
   creationDate: {
     type: Date,
     required: [true, "Enter a date"],

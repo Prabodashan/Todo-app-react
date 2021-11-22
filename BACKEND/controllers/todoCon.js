@@ -1,4 +1,5 @@
 const Todo = require("../models/Todo");
+const { upload } = require("../helpers/imageup");
 
 //Get all todos
 exports.getAllTodos = async (req, res) => {
@@ -12,29 +13,48 @@ exports.getAllTodos = async (req, res) => {
 
 //Add new todo
 exports.addNewTodo = async (req, res) => {
-  const { title, description } = req.body;
-  // Check if todo title already exist
-  const todoByTitle = await Todo.findOne({ title });
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.json({ errors: { message: err.message } });
+    } else {
+      //Check if todo title
+      if (req.file) {
+        const { title, description } = req.body;
+        const todoImage = req.file.filename;
+        console.log(todoImage);
 
-  if (todoByTitle) {
-    return res.json({ errors: { message: "Todo title already exist!!" } });
-  }
+        // Check if todo title already exist
+        const todoByTitle = await Todo.findOne({ title });
 
-  // Create new todo
-  const newTodo = new Todo({
-    title: title,
-    description: description,
-    creationDate: Date.now(),
+        if (todoByTitle) {
+          return res.json({
+            errors: { message: "Todo title already exist!!" },
+          });
+        }
+
+        // Create new todo
+        const newTodo = new Todo({
+          title: title,
+          description: description,
+          todoImage: todoImage,
+          creationDate: Date.now(),
+        });
+        try {
+          await newTodo.save();
+          res.status(200).json({
+            created: true,
+            success: { message: "Todo successful created!!" },
+          });
+        } catch (err) {
+          res.json({
+            errors: { message: Object.entries(err.errors)[0][1].message },
+          });
+        }
+      } else {
+        return res, json({ errors: { message: "select an image!" } });
+      }
+    }
   });
-  try {
-    await newTodo.save();
-    res.status(200).json({
-      created: true,
-      success: { message: "Todo successful created!!" },
-    });
-  } catch (err) {
-    res.json({ errors: { message: Object.entries(err.errors)[0][1].message } });
-  }
 };
 
 //Get todo By id
